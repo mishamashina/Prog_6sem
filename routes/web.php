@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ArticleController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,9 +15,9 @@ use App\Http\Controllers\MainController;
 |
 */
 
-Route::get('/', function () {
-    return view('layout');
-});
+// Route::get('/', function () {
+//     return view('layout');
+// });
 
 Route::get('/contacts', function(){
     $contacts = [
@@ -26,5 +28,14 @@ Route::get('/contacts', function(){
     return view('main.contact', ['contacts'=>$contacts]);
 });
 
-Route::get('/articles', [MainController::class, 'index']);
+Route::get('/', [MainController::class, 'index']);
 Route::get('/full-img/{img}', [MainController::class, 'show']);
+
+//Auth
+
+Route::get('/signin', [AuthController::class, 'signin']);
+Route::post('/registr', [AuthController::class, 'registr']);
+
+//Article
+
+Route::resource('article', ArticleController::class);
