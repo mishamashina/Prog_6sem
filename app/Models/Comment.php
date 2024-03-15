@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Article extends Model
+class Comment extends Model
 {
     use HasFactory;
 
@@ -13,9 +13,8 @@ class Article extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    function comment()
+    function article()
     {
-        return $this->hasMany(Comment::class);
+        return $this->belongsTo(Article::class);
     }
 }
