@@ -40,7 +40,10 @@ Route::get('/full-img/{img}', [MainController::class, 'show']);
 
 Route::get('/signin', [AuthController::class, 'signin']);
 Route::post('/registr', [AuthController::class, 'registr']);
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/signup', [AuthController::class, 'signup']);
+Route::get('/logout', [AuthController::class, 'logout']);
 
 //Article
 
-Route::resource('article', ArticleController::class);
+Route::resource('article', ArticleController::class)->middleware('auth:sanctum');
