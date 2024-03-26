@@ -32,17 +32,17 @@
     <div class="card mt-2" style="width: 78rem;">
     <div class="card-body">
         <h5 class="card-title">{{$comment->title}}</h5>
-        <p class="card-tex">{{$comment->text}}</p>
-        @can('comment', $comment)
+        <p class="card-text">{{$comment->text}}</p>
+
         <div class="btn-toolbar">
-            <a href="/article/{{$article->id}}/edit" class="btn btn-primary mr-3">Edit article</a>
-            <form action="/article/{{$article->id}}" method="post">
+            <a href="/comment/{{$comment->id}}/edit" class="btn btn-primary mr-3">Edit</a>
+            <form action="/comment/{{$comment->id}}" method="post">
                 @method("DELETE")
                 @csrf
-                <button type="submit" class="btn btn-danger">Delete article</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
             </form>
         </div>
-        @endcan
+
     </div>
     </div>
     @endforeach

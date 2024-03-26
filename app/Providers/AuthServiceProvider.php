@@ -28,9 +28,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         Gate::define('comment', function(User $user, Comment $comment){
-            return ($comment->user_id === $user->id) ? 
-            Response::allow() :
-            Response::deny('not author');
+            if ($user->id === $comment->user_id){
+                return Response::allow();}
+            return Response::deny('В доступе отказано!');
         });
         //
     }

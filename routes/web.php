@@ -18,7 +18,8 @@ use App\Http\Controllers\CommentController;
 
 // Comment
 
-Route::post('comment', [CommentController::class, 'store']);
+Route::resource('comment', CommentController::class);
+
 
 // Route::get('/', function () {
 //     return view('layout');
