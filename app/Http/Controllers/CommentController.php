@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use App\Mail\MailNewComment;
+use Illuminate\Support\Facades\Mail;
+use App\Models\Article;
 
 class CommentController extends Controller
 {
@@ -39,12 +42,20 @@ class CommentController extends Controller
             'title'=>'required',
             'text'=>'required'
         ]);
+
+        $article = Article::findOrFail($request->article_id);
+
         $comment = new Comment;
         $comment->title = $request->title;
         $comment->text = request('text');
         $comment->article_id = request('article_id');
         $comment->user_id = 1;
-        $comment->save();
+        $res = $comment->save();
+
+        if ($res) {
+            Mail::to('misha_sidorenko228@mail.ru')->send(new MailNewComment($comment, $article->name));
+        }
+
         return redirect()->route('article.show', ['article'=>request('article_id')]);
     }
 

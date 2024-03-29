@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+
+use App\Policies\Responce;
 
 class ArticleController extends Controller
 {
@@ -26,6 +29,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', [self::class]);
         return view('article.create');
     }
 
@@ -71,6 +75,7 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
+        $this->authorize('update', $article);
         return view('article.edit', ['article'=>$article]);
     }
 
@@ -104,6 +109,7 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
+        Gate::authorize('delete', [self::class, $article]);
         $article->delete();
         return redirect()->route('article.index');
     }

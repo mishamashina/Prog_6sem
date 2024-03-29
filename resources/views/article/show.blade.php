@@ -33,7 +33,7 @@
     <div class="card-body">
         <h5 class="card-title">{{$comment->title}}</h5>
         <p class="card-text">{{$comment->text}}</p>
-
+        @can('comment', $comment)
         <div class="btn-toolbar">
             <a href="/comment/{{$comment->id}}/edit" class="btn btn-primary mr-3">Edit</a>
             <form action="/comment/{{$comment->id}}" method="post">
@@ -42,7 +42,7 @@
                 <button type="submit" class="btn btn-danger">Delete</button>
             </form>
         </div>
-
+        @endcan
     </div>
     </div>
     @endforeach
