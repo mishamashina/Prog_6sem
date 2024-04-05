@@ -19,7 +19,7 @@ use App\Http\Controllers\CommentController;
 // Comment
 
 Route::resource('comment', CommentController::class);
-
+//Route::get('comment', [CommentController::class, 'index']);
 
 // Route::get('/', function () {
 //     return view('layout');

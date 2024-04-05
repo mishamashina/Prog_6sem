@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Mail\MailNewComment;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Article;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
@@ -17,7 +18,12 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        $comments = DB::table('comments')
+                    ->join('users', 'users.id', '=', 'comments.user_id')
+                    ->join('articles', 'articles.id', '=', 'comments.article_id')
+                    ->select('comments.*', 'users.name', 'articles.name as article_name')
+                    ->get();
+        return view('comment.index', ['comments'=>$comments]);
     }
 
     /**
@@ -56,7 +62,7 @@ class CommentController extends Controller
             Mail::to('misha_sidorenko228@mail.ru')->send(new MailNewComment($comment, $article->name));
         }
 
-        return redirect()->route('article.show', ['article'=>request('article_id')]);
+        return redirect()->route('article.show', ['article'=>request('article_id')])->with(['res'=>$res]);
     }
 
     /**
