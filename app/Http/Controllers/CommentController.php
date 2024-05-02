@@ -8,6 +8,7 @@ use App\Mail\MailNewComment;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Article;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\VeryLongJob;
 
 class CommentController extends Controller
 {
@@ -23,6 +24,7 @@ class CommentController extends Controller
                     ->join('articles', 'articles.id', '=', 'comments.article_id')
                     ->select('comments.*', 'users.name', 'articles.name as article_name')
                     ->get();
+        Log::alert($comments);
         return view('comment.index', ['comments'=>$comments]);
     }
 
@@ -31,6 +33,19 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     public function accept(Comment $comment){
+        $comment->accept = 'true';
+        $comment->save();
+        return redirect()->route('comment.index');
+    }
+
+    public function reject(Comment $comment){
+        $comment->accept = 'false';
+        $comment->save();
+        return redirect()->route('comment.index');
+    }
+
     public function create()
     {
         //
@@ -58,10 +73,13 @@ class CommentController extends Controller
         $comment->user_id = 1;
         $res = $comment->save();
 
+        // if ($res) {
+        //     VeryLongJob::dispatch($comment, $article->name);
+        // }
+
         if ($res) {
             Mail::to('misha_sidorenko228@mail.ru')->send(new MailNewComment($comment, $article->name));
         }
-
         return redirect()->route('article.show', ['article'=>request('article_id')])->with(['res'=>$res]);
     }
 

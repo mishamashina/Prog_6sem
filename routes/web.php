@@ -18,8 +18,15 @@ use App\Http\Controllers\CommentController;
 
 // Comment
 
-Route::resource('comment', CommentController::class);
+//Route::resource('comment', CommentController::class);
 //Route::get('comment', [CommentController::class, 'index']);
+Route::controller(CommentController::class)->group(function(){
+    Route::post('comment', 'store');
+    //Route::resource('comment');
+    Route::get('comment', 'index')->name('comment.index');
+    Route::get('comment/{comment}/accept', 'accept');
+    Route::get('comment/{comment}/reject', 'reject');
+});
 
 // Route::get('/', function () {
 //     return view('layout');
