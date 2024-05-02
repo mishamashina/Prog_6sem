@@ -20,7 +20,7 @@ class VeryLongJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public Comment $comment, Article $article)
+    public function __construct(public Comment $comment, public Article $article)
     {
         //
     }

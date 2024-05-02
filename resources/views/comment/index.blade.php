@@ -3,11 +3,11 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col"> Date </th>
-      <th scope="col"> Name </th>
-      <th scope="col"> ShortDesc</th>
-      <th scope="col"> Desc </th>
-      <th scope="col"> Preview image </th>
+      <th scope="col"> Title </th>
+      <th scope="col"> Text </th>
+      <th scope="col"> Article </th>
+      <th scope="col"> User </th>
+      <th scope="col"> Accept/Reject </th>
     </tr>
   </thead>
   <tbody>
