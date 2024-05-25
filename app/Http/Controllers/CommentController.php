@@ -25,6 +25,7 @@ class CommentController extends Controller
                     ->select('comments.*', 'users.name', 'articles.name as article_name')
                     ->get();
         //Log::alert($comments);
+        if(request()->expectsJson()) return response()->json($comments);
         return view('comment.index', ['comments'=>$comments]);
     }
 
@@ -37,12 +38,14 @@ class CommentController extends Controller
      public function accept(Comment $comment){
         $comment->accept = 'true';
         $comment->save();
+        if(request()->expectsJson()){return response()->json("comment $comment->id accept");}
         return redirect()->route('comment.index');
     }
 
     public function reject(Comment $comment){
         $comment->accept = 'false';
         $comment->save();
+        if(request()->expectsJson()){return response()->json("comment $comment->id reject");}
         return redirect()->route('comment.index');
     }
 

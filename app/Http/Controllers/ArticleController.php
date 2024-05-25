@@ -19,6 +19,7 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::latest()->paginate(5);
+        if(request()->expectsJson()) return response()->json($articles);
         return view('article.index', ['articles'=>$articles]);
     }
 
@@ -53,6 +54,7 @@ class ArticleController extends Controller
         $article->user_id = 1;
         $res = $article->save();
         if($res) ArticleEvent::dispatch($article);
+        if(request()->expectsJson()) return response()->json($res);
         return redirect()->route('article.index');
     }
 
@@ -98,7 +100,8 @@ class ArticleController extends Controller
         $article->name = request('name');
         $article->desc = request('desc');
         $article->user_id = 1;
-        $article->save();
+        $res = $article->save();
+        if(request()->expectsJson()) return response()->json($res);
         return redirect()->route('article.show', ['article'=>$article->id]);
     }
 
@@ -111,7 +114,8 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         Gate::authorize('delete', [self::class, $article]);
-        $article->delete();
+        $res = $article->delete();
+        if(request()->expectsJson()) return response()->json($res);
         return redirect()->route('article.index');
     }
 }

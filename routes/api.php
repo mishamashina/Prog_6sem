@@ -16,10 +16,10 @@ use App\Http\Controllers\CommentController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+//Article
+Route::resource('article', ArticleController::class)->middleware('auth:sanctum');
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Comment
 
 Route::controller(CommentController::class)->group(function(){
     Route::post('comment', 'store');
@@ -30,13 +30,12 @@ Route::controller(CommentController::class)->group(function(){
 
 //Auth
 
-Route::get('/signin', [AuthController::class, 'signin']);
+//Route::get('/signin', [AuthController::class, 'signin']);
 Route::post('/registr', [AuthController::class, 'registr']);
-Route::get('/login', [AuthController::class, 'login'])->name('login');
+//Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::get('/logout', [AuthController::class, 'logout']);
 
-//Article
-Route::resource('article', ArticleController::class)->middleware('auth:sanctum');
-Route::get('article/{article}', [ArticleController::class, 'show'])->name('article.show')->middleware('auth:sanctum', 'stat');
-
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});

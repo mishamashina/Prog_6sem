@@ -16,8 +16,11 @@ use App\Http\Controllers\CommentController;
 |
 */
 
-// Comment
+//Article
+Route::resource('article', ArticleController::class)->middleware('auth:sanctum');
+//Route::get('article/{article}', [ArticleController::class, 'show'])->name('article.show')->middleware('auth:sanctum', 'stat');
 
+// Comment
 Route::controller(CommentController::class)->group(function(){
     Route::post('comment', 'store');
     Route::get('comment', 'index')->name('comment.index');
@@ -48,9 +51,3 @@ Route::post('/registr', [AuthController::class, 'registr']);
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::get('/logout', [AuthController::class, 'logout']);
-
-//Article
-Route::resource('article', ArticleController::class)->middleware('auth:sanctum');
-Route::get('article/{article}', [ArticleController::class, 'show'])->name('article.show')->middleware('auth:sanctum', 'stat');
-
-
