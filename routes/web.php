@@ -50,5 +50,7 @@ Route::post('/signup', [AuthController::class, 'signup']);
 Route::get('/logout', [AuthController::class, 'logout']);
 
 //Article
-
 Route::resource('article', ArticleController::class)->middleware('auth:sanctum');
+Route::get('article/{article}', [ArticleController::class, 'show'])->name('article.show')->middleware('auth:sanctum', 'stat');
+
+

@@ -21,23 +21,19 @@ class AuthController extends Controller
             'email'=>'required|unique:App\Models\User|email',
             'password'=>'required|min:6'
         ]);
-        // $response = [
-        //     'name'=>$request->name,
-        //     'email'=>$request->email,
-        //     'password'=>$request->password,
-        // ];
-        //return response()->json($response);
+
         $user = User::create([
             'name'=>$request->name,
             'email'=>$request->email,
             'password'=>Hash::make($request->password),
         ]);
-        $user->createToken('MyAppTokens');
+
+        $token = $user->createToken('MyAppToken');
+        if(request()->expectsJson()) return response()->json($token);
         return redirect()->route('login');
     }
-    public function login()
+    public function login(Request $request)
     {
-        //var_dump($articles);
         return view('auth.signup');
     }
     public function signup(Request $request)
@@ -50,6 +46,8 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials))
         {
+            $token = $request->user()->createToken('MyAppToken');
+            if(request()->expectsJson()) return response()->json($token);
             $request->session()->regenerate();
             return redirect()->intended('/article');
         }
@@ -59,6 +57,10 @@ class AuthController extends Controller
     }
     public function logout(Request $request)
     {
+        if(request()->expectsJson()){
+            //auth()->user()->tokens()->delete();
+            return response()->json('logout');
+        }
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
