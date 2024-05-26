@@ -18,7 +18,7 @@ use App\Http\Controllers\CommentController;
 
 //Article
 Route::resource('article', ArticleController::class)->middleware('auth:sanctum');
-//Route::get('article/{article}', [ArticleController::class, 'show'])->name('article.show')->middleware('auth:sanctum', 'stat');
+Route::get('article/{article}', [ArticleController::class, 'show'])->name('article.show')->middleware('auth:sanctum', 'stat');
 
 // Comment
 Route::controller(CommentController::class)->group(function(){
