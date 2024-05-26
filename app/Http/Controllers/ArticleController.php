@@ -82,8 +82,6 @@ class ArticleController extends Controller
         $comments = Cache::rememberForever('article_comment'.$article->id, function()use($article){
             return Comment::where(['article_id'=>$article->id,'accept'=>'true'])->get();
         });
-        //var_dump($comments);
-        //var_dump($article->id);
         return view('article.show', ['article'=>$article], ['comments'=>$comments]);
     }
 
