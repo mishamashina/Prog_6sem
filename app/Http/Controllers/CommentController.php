@@ -6,6 +6,7 @@ use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Mail\MailNewComment;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Article;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\VeryLongJob;
@@ -19,11 +20,14 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments = DB::table('comments')
+        $comments = Cache::rememberForever('comments', function(){
+            return
+            DB::table('comments')
                     ->join('users', 'users.id', '=', 'comments.user_id')
                     ->join('articles', 'articles.id', '=', 'comments.article_id')
                     ->select('comments.*', 'users.name', 'articles.name as article_name')
                     ->get();
+        });
         //Log::alert($comments);
         if(request()->expectsJson()) return response()->json($comments);
         return view('comment.index', ['comments'=>$comments]);
@@ -36,6 +40,8 @@ class CommentController extends Controller
      */
 
      public function accept(Comment $comment){
+        Cache::forget('comments');
+        Cache::forget('article_comment'.$comment->article_id);
         $comment->accept = 'true';
         $comment->save();
         if(request()->expectsJson()){return response()->json("comment $comment->id accept");}
@@ -43,6 +49,8 @@ class CommentController extends Controller
     }
 
     public function reject(Comment $comment){
+        Cache::forget('comments');
+        Cache::forget('article_comment'.$comment->article_id);
         $comment->accept = 'false';
         $comment->save();
         if(request()->expectsJson()){return response()->json("comment $comment->id reject");}
@@ -62,6 +70,7 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
+        Cache::forget('comments');
         $request->validate([
             'title'=>'required',
             'text'=>'required'
@@ -79,7 +88,7 @@ class CommentController extends Controller
         if ($res) {
             VeryLongJob::dispatch($comment, $article);
         }
-
+        if(request()->expectsJson()) return response()->json($res);
         return redirect()->route('article.show', ['article'=>request('article_id')])->with(['res'=>$res]);
     }
 
@@ -132,6 +141,7 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
+        Cache::flush();
         $comment->delete();
         return redirect()->route('article.show', ['article'=>$comment->article_id]);
     }
