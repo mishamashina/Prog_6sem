@@ -123,6 +123,7 @@ class CommentController extends Controller
      */
     public function update(Request $request, Comment $comment)
     {
+        Cache::flush();
         $request->validate([
             'title'=>'required',
             'text'=>'required'

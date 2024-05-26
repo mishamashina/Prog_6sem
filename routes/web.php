@@ -23,6 +23,9 @@ Route::get('article/{article}', [ArticleController::class, 'show'])->name('artic
 // Comment
 Route::controller(CommentController::class)->group(function(){
     Route::post('comment', 'store');
+    Route::delete('comment/{comment}', 'destroy');
+    Route::get('comment/{comment}/edit', 'edit');
+    Route::put('comment/{comment}', 'update');
     Route::get('comment', 'index')->name('comment.index');
     Route::get('comment/{comment}/accept', 'accept');
     Route::get('comment/{comment}/reject', 'reject');

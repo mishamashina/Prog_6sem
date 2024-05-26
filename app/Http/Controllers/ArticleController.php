@@ -80,8 +80,10 @@ class ArticleController extends Controller
     public function show(Article $article)
     {
         $comments = Cache::rememberForever('article_comment'.$article->id, function()use($article){
-            return Comment::where('article_id', $article->id)->where('accept', true)->latest()->get();
+            return Comment::where(['article_id'=>$article->id,'accept'=>'true'])->get();
         });
+        //var_dump($comments);
+        //var_dump($article->id);
         return view('article.show', ['article'=>$article], ['comments'=>$comments]);
     }
 
@@ -107,8 +109,8 @@ class ArticleController extends Controller
     public function update(Request $request, Article $article)
     {
         $keys = DB::table('cache')
-        ->select('key')
-        ->whereRaw('`key` GLOB :key', [':key' => 'articles*[0-9]'])->get();
+            ->select('key')
+            ->whereRaw('`key` GLOB :key', [':key' => 'articles*[0-9]'])->get();
         foreach($keys as $key){
             Cache::forget($key->key);
         }
