@@ -79,6 +79,9 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
+        if (isset($_GET['id_notify'])){
+            auth()->user()->notifications->where('id',$_GET['id_notify'])->first()->markAsRead();
+        }
         $comments = Cache::rememberForever('article_comment'.$article->id, function()use($article){
             return Comment::where(['article_id'=>$article->id,'accept'=>'true'])->get();
         });

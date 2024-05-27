@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Article;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\VeryLongJob;
+use Illuminate\Support\Facades\Notification;
+use App\Models\User;
+use App\Notifications\CommentNotify;
 
 class CommentController extends Controller
 {
@@ -42,8 +45,10 @@ class CommentController extends Controller
      public function accept(Comment $comment){
         Cache::forget('comments');
         Cache::forget('article_comment'.$comment->article_id);
+        $users = User::where('id', '!=', $comment->user_id)->get();
         $comment->accept = 'true';
-        $comment->save();
+        $res = $comment->save();
+        if ($res) Notification::send($users, new CommentNotify($comment->title, $comment->article_id));
         if(request()->expectsJson()){return response()->json("comment $comment->id accept");}
         return redirect()->route('comment.index');
     }
@@ -85,9 +90,7 @@ class CommentController extends Controller
         $comment->user_id = 1;
         $res = $comment->save();
 
-        if ($res) {
-            VeryLongJob::dispatch($comment, $article);
-        }
+        if ($res) {VeryLongJob::dispatch($comment, $article);}
         if(request()->expectsJson()) return response()->json($res);
         return redirect()->route('article.show', ['article'=>request('article_id')])->with(['res'=>$res]);
     }

@@ -17,7 +17,7 @@
     <h4>Comments</h4>
 
     @if(session('res'))
-        <div class="allert">Ваш комментарий добавлен и отправлен на модерацию</div>
+    <div class="allert-secondary">Ваш комментарий добавлен и отправлен на модерацию</div>
     @endif
         <form action="/comment" method="post">
             @csrf
