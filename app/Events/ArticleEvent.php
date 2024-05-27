@@ -22,7 +22,7 @@ class ArticleEvent implements ShouldBroadcast
      */
     public function __construct(public Article $article)
     {
-        //
+        //sleep(5);
     }
 
     /**
