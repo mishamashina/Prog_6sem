@@ -22,7 +22,7 @@ Route::get('article/{article}', [ArticleController::class, 'show'])->name('artic
 
 // Comment
 Route::controller(CommentController::class)->group(function(){
-    Route::post('comment', 'store');
+    Route::post('comment', 'store')->middleware('auth:sanctum');
     Route::delete('comment/{comment}', 'destroy');
     Route::get('comment/{comment}/edit', 'edit');
     Route::put('comment/{comment}', 'update');

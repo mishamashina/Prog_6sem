@@ -52,7 +52,7 @@ class CommentNotify extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toDatabase(object $notifiable): array
+    public function toDatabase(object $notifiable)
     {
         return [
             //
