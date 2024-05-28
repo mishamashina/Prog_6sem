@@ -27,7 +27,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        
         Gate::before(function(User $user){
             if ($user->role == 'moderator') return true;
         });
@@ -37,10 +36,9 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('comment', function(User $user, Comment $comment){
-            if ($user->id === $comment->user_id){
+            if ($user->id == $comment->user_id){
             return Response::allow();}
             return Response::deny('В доступе отказано!');
         });
-        //
     }
 }

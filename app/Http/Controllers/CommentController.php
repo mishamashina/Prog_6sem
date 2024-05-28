@@ -13,6 +13,7 @@ use App\Jobs\VeryLongJob;
 use Illuminate\Support\Facades\Notification;
 use App\Models\User;
 use App\Notifications\CommentNotify;
+use Illuminate\Support\Facades\Gate;
 
 class CommentController extends Controller
 {
@@ -87,7 +88,7 @@ class CommentController extends Controller
         $comment->title = $request->title;
         $comment->text = request('text');
         $comment->article_id = request('article_id');
-        $comment->user_id = 1;
+        $comment->user_id = auth()->id();
         $res = $comment->save();
 
         if ($res) {VeryLongJob::dispatch($comment, $article);}
@@ -114,6 +115,7 @@ class CommentController extends Controller
      */
     public function edit(Comment $comment)
     {
+        Gate::authorize('comment', ['comment'=>$comment]);
         return view('comment.edit', ['comment'=>$comment]);
     }
 
@@ -146,6 +148,7 @@ class CommentController extends Controller
     public function destroy(Comment $comment)
     {
         Cache::flush();
+        Gate::authorize('comment',['comment'=>$comment]);
         $comment->delete();
         return redirect()->route('article.show', ['article'=>$comment->article_id]);
     }

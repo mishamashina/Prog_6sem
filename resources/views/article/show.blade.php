@@ -4,6 +4,7 @@
     <div class="card-body">
         <h5 class="card-title">{{$article->name}}</h5>
         <p class="card-tex">{{$article->desc}}</p>
+        @can('create')
         <div class="btn-toolbar">
             <a href="/article/{{$article->id}}/edit" class="btn btn-primary mr-3">Edit article</a>
             <form action="/article/{{$article->id}}" method="post">
@@ -12,6 +13,7 @@
                 @csrf
             </form>
         </div>
+        @endcan
     </div>
     </div>
     <h4>Comments</h4>

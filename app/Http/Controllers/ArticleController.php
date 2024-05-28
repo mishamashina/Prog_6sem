@@ -55,6 +55,8 @@ class ArticleController extends Controller
             Cache::forget($key->key);
         }
 
+        Gate::authorize('create', [self::class]);
+        
         $request->validate([
             'date'=>'required',
             'name'=>'required|min:6',
@@ -64,7 +66,7 @@ class ArticleController extends Controller
         $article->date = $request->date;
         $article->name = request('name');
         $article->desc = request('desc');
-        $article->user_id = 1;
+        $article->user_id = auth()->id();
         $res = $article->save();
         if($res) ArticleEvent::dispatch($article);
         if(request()->expectsJson()) return response()->json($res);
@@ -96,6 +98,7 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
+        Gate::authorize('create', [self::class]);
         $this->authorize('update', $article);
         return view('article.edit', ['article'=>$article]);
     }
@@ -116,6 +119,7 @@ class ArticleController extends Controller
             Cache::forget($key->key);
         }
 
+        Gate::authorize('create', [self::class]);
         $request->validate([
             'date'=>'required',
             'name'=>'required|min:6',

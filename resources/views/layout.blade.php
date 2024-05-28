@@ -35,9 +35,11 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/contacts">Contacts <span class="sr-only">(current)</span></a>
             </li>
+            @can('create')
             <li class="nav-item">
                 <a class="nav-link" href="/article/create">Create Article</a>
             </li>
+            @endcan
             @auth
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
